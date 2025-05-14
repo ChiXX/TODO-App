@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export function PaginationHeader({ pageSize, setPageSize, currentPage, setCurrentPage, totalPages }) {
+export function PaginationHeader({ pageSize, setPageSize, currentPage, setCurrentPage, totalPages, totalItems  }) {
   const [goto, setGoto] = useState('');
 
   const handleGoto = () => {
@@ -27,6 +27,10 @@ export function PaginationHeader({ pageSize, setPageSize, currentPage, setCurren
             <option key={size} value={size}>{size}</option>
           ))}
         </select>
+      </div>
+
+      <div className="text-sm text-gray-700">
+        Total items: {totalItems}
       </div>
 
       <div className="flex items-center gap-2">
@@ -54,12 +58,24 @@ export function PaginationHeader({ pageSize, setPageSize, currentPage, setCurren
 export function PaginationFooter({ currentPage, totalPages, setCurrentPage }) {
   const pages = [];
 
-  // Determine the range of page numbers to display
-  const startPage = Math.max(1, currentPage - 2);
-  const endPage = Math.min(totalPages, currentPage + 2);
+  const delta = 1; // Number of pages to show around the current page
 
-  for (let i = startPage; i <= endPage; i++) {
-    pages.push(i);
+  const range = [];
+
+  for (let i = Math.max(2, currentPage - delta); i <= Math.min(totalPages - 1, currentPage + delta); i++) {
+    range.push(i);
+  }
+
+  if (currentPage - delta > 2) {
+    range.unshift('...');
+  }
+  if (currentPage + delta < totalPages - 1) {
+    range.push('...');
+  }
+
+  range.unshift(1);
+  if (totalPages > 1) {
+    range.push(totalPages);
   }
 
   return (
@@ -73,19 +89,24 @@ export function PaginationFooter({ currentPage, totalPages, setCurrentPage }) {
         Previous
       </button>
 
-      {pages.map((page) => (
-        <button
-          key={page}
-          onClick={() => setCurrentPage(page)}
-          className={`px-3 py-1 rounded border text-sm ${
-            page === currentPage
-              ? 'bg-blue-500 text-white border-blue-500'
-              : 'border-gray-300'
-          }`}
-        >
-          {page}
-        </button>
-      ))}
+      {/* Page number buttons */}
+      {range.map((page, index) =>
+        page === '...' ? (
+          <span key={index} className="px-3 py-1 text-sm text-gray-500">...</span>
+        ) : (
+          <button
+            key={page}
+            onClick={() => setCurrentPage(page)}
+            className={`px-3 py-1 rounded border text-sm ${
+              page === currentPage
+                ? 'bg-blue-500 text-white border-blue-500'
+                : 'border-gray-300'
+            }`}
+          >
+            {page}
+          </button>
+        )
+      )}
 
       {/* Next button */}
       <button

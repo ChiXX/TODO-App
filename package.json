@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "mongo": "docker compose -f docker-compose.db.yml up -d",
-    "seed": "node seed.js",
     "dev": "npm run mongo && next dev",
-    "dev:seed": "npm run mongo && npm run seed && next dev",
+    "seed": "node seed.js",
+    "reset-db": "docker compose -f docker-compose.db.yml down -v && docker compose -f docker-compose.db.yml up -d",
+    "dev:seed": "npm run reset-db && npm run seed && next dev",
+    "dev:reset": "npm run reset-db && next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

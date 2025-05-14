@@ -58,7 +58,8 @@ export default function TopicsList() {
   const [topics, setTopics] = useState([]);
   const [filteredTopics, setFilteredTopics] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortBy, setSortBy] = useState("title");
+  const [sortBy, setSortBy] = useState("");
+  const [sortOrder, setSortOrder] = useState("asc");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
 
@@ -73,23 +74,29 @@ export default function TopicsList() {
 
   useEffect(() => {
     // Filter topics based on search term
-    let filtered = topics.filter((topic) =>
-      topic.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      topic.description.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-    // Sort topics based on sortBy
-    filtered.sort((a, b) => {
-      if (sortBy === "dueDate") {
-        return new Date(a.dueDate) - new Date(b.dueDate);
-      } else {
-        return a[sortBy].localeCompare(b[sortBy]);
-      }
+    let filtered = topics.filter((topic) => {
+      const search = searchTerm.toLowerCase();
+      const titleMatch = topic.title.toLowerCase().includes(search);
+      const descriptionMatch = topic.description.toLowerCase().includes(search);
+      const dueDateMatch = new Date(topic.dueDate).toISOString().split("T")[0].includes(search);
+      return titleMatch || descriptionMatch || dueDateMatch;
     });
+
+    // Sort topics
+    if (sortBy !== "") {
+    filtered.sort((a, b) => {
+      let aValue = sortBy === "dueDate" ? new Date(a.dueDate) : a[sortBy].toLowerCase();
+      let bValue = sortBy === "dueDate" ? new Date(b.dueDate) : b[sortBy].toLowerCase();
+
+      if (aValue < bValue) return sortOrder === "asc" ? -1 : 1;
+      if (aValue > bValue) return sortOrder === "asc" ? 1 : -1;
+      return 0;
+    });
+  }
 
     setFilteredTopics(filtered);
     setCurrentPage(1); // Reset to first page on search or sort change
-  }, [topics, searchTerm, sortBy]);
+  }, [topics, searchTerm, sortBy, sortOrder]);
 
   // Calculate pagination
   const totalPages = Math.ceil(filteredTopics.length / pageSize);
@@ -102,7 +109,7 @@ export default function TopicsList() {
     <div>
       <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
         <SearchBar onSearch={setSearchTerm} />
-        <SortDropdown sortBy={sortBy} setSortBy={setSortBy} />
+        <SortDropdown sortBy={sortBy} setSortBy={setSortBy} sortOrder={sortOrder} setSortOrder={setSortOrder} />
       </div>
 
       <PaginationHeader
@@ -111,6 +118,7 @@ export default function TopicsList() {
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         totalPages={totalPages}
+        totalItems={filteredTopics.length}
       />
 
       <ul className="divide-y divide-gray-200">
@@ -119,7 +127,7 @@ export default function TopicsList() {
             <h3 className="text-lg font-semibold">{topic.title}</h3>
             <p className="text-sm text-gray-600">{topic.description}</p>
             <p className="text-sm text-gray-500">
-              Due Date: {new Date(topic.dueDate).toLocaleDateString()}
+              Due Date: {new Date(topic.dueDate).toISOString().split("T")[0]}
             </p>
           <div className="flex gap-2">
             <RemoveBtn id={topic._id} />
