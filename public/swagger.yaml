@@ -1,0 +1,160 @@
+openapi: 3.0.3
+info:
+  title: Topics API
+  version: 1.0.0
+  description: API for managing topics in a TODO app built with Next.js and MongoDB
+
+servers:
+  - url: http://localhost:3000
+
+paths:
+  /api/topics:
+    get:
+      summary: Get all topics (with pagination, search, and sorting)
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+          description: Search by title, description, or due date (YYYY-MM-DD)
+        - name: sortBy
+          in: query
+          schema:
+            type: string
+            enum: [title, description, dueDate]
+          description: Field to sort by
+        - name: sortOrder
+          in: query
+          schema:
+            type: string
+            enum: [asc, desc]
+          description: Sort direction
+        - name: page
+          in: query
+          schema:
+            type: integer
+          description: Page number
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+          description: Items per page
+      responses:
+        '200':
+          description: A paginated list of topics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  topics:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Topic'
+                  pagination:
+                    type: object
+                    properties:
+                      totalItems:
+                        type: integer
+                      totalPages:
+                        type: integer
+                      currentPage:
+                        type: integer
+                      pageSize:
+                        type: integer
+
+    post:
+      summary: Create a new topic
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TopicInput'
+      responses:
+        '201':
+          description: Topic created successfully
+        '400':
+          description: Invalid input
+
+  /api/topics/{id}:
+    put:
+      summary: Update a topic by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TopicInput'
+      responses:
+        '200':
+          description: Topic updated successfully
+        '404':
+          description: Topic not found
+
+    delete:
+      summary: Delete a topic by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Topic deleted successfully
+        '404':
+          description: Topic not found
+
+    get:
+      summary: Get a single topic by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Topic fetched successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Topic'
+        '404':
+          description: Topic not found
+
+components:
+  schemas:
+    Topic:
+      type: object
+      properties:
+        _id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        dueDate:
+          type: string
+          format: date
+    TopicInput:
+      type: object
+      required:
+        - title
+        - description
+        - dueDate
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        dueDate:
+          type: string
+          format: date
