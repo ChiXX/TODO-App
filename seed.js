@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Topic = require("./models/topic");
 
-// Generate a due date +/- 30 days from today
+// Generate a due date +/- {offsetDays} days from today
 function randomDateWithinDays(offsetDays) {
   const now = new Date();
   const offset = Math.floor(Math.random() * offsetDays * 2) - offsetDays;
@@ -39,7 +39,7 @@ async function seed() {
 
     for (let i = 1; i <= 100; i++) {
       const title = generateRandomText(sampleWords, sampleObjects);
-      const description = `Task ${i}: ${generateRandomText(sampleWords, sampleObjects)} to improve project reliability.`;
+      const description = `${generateRandomText(sampleWords, sampleObjects)} to improve project reliability.`;
       const dueDate = randomDateWithinDays(30);
 
       topics.push({ title, description, dueDate });

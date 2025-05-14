@@ -1,27 +1,41 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useMemo } from "react";
-import debounce from "lodash.debounce";
+import { useState, useEffect } from 'react';
 
 export default function SearchBar({ onSearch }) {
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState('');
+  const [debouncedInput, setDebouncedInput] = useState('');
 
-  // Create a debounced version of the onSearch function
-  const debouncedSearch = useMemo(() => debounce(onSearch, 500), [onSearch]);
-
+  // Debounce input to optimize performance
   useEffect(() => {
-    debouncedSearch(input);
-    // Cleanup function to cancel debounce on unmount
-    return () => debouncedSearch.cancel();
-  }, [input, debouncedSearch]);
+    const handler = setTimeout(() => {
+      setDebouncedInput(input);
+    }, 300); 
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [input]);
+
+  // Trigger search when debounced input changes
+  useEffect(() => {
+    onSearch(debouncedInput);
+  }, [debouncedInput, onSearch]);
 
   return (
-    <input
-      type="text"
-      placeholder="Search topics..."
-      value={input}
-      onChange={(e) => setInput(e.target.value)}
-      className="border border-gray-300 rounded px-2 py-1 text-sm w-full"
-    />
+    <div className="relative w-full max-w-md">
+      <label htmlFor="search" className="sr-only">
+        Search topics
+      </label>
+      <input
+        id="search"
+        type="text"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        placeholder="Search by title, description, or due date..."
+        className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        aria-label="Search topics"
+      />
+    </div>
   );
 }
