@@ -63,14 +63,13 @@ export default function TopicsList() {
   const [pageSize, setPageSize] = useState(5);
 
   useEffect(() => {
-    // Fetch topics from the API
-    const fetchTopics = async () => {
-      const res = await fetch("/api/topics");
-      const data = await res.json();
-      setTopics(data.topics);
-    };
-    fetchTopics();
-  }, []);
+  const fetchTopics = async () => {
+    const res = await fetch("/api/topics?paginate=false");
+    const data = await res.json();
+    setTopics(data.topics);
+  };
+  fetchTopics();
+}, []);
 
   useEffect(() => {
     // Filter topics based on search term
@@ -122,6 +121,12 @@ export default function TopicsList() {
             <p className="text-sm text-gray-500">
               Due Date: {new Date(topic.dueDate).toLocaleDateString()}
             </p>
+          <div className="flex gap-2">
+            <RemoveBtn id={topic._id} />
+            <Link href={`/editTopic/${topic._id}`}>
+              <HiPencilAlt size={24} />
+            </Link>
+          </div>
           </li>
         ))}
       </ul>

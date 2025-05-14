@@ -6,14 +6,18 @@ import { useRouter } from "next/navigation";
 export default function AddTopic() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [dueDate, setDueDate] = useState(() => {
+    const today = new Date();
+    return today.toISOString().split("T")[0]; // Formats to 'YYYY-MM-DD'
+  });
 
   const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!title || !description) {
-      alert("Title and description are required.");
+    if (!title || !description || !dueDate) {
+      alert("Title, description, and due date are required.");
       return;
     }
 
@@ -23,7 +27,7 @@ export default function AddTopic() {
         headers: {
           "Content-type": "application/json",
         },
-        body: JSON.stringify({ title, description }),
+        body: JSON.stringify({ title, description, dueDate }),
       });
 
       if (res.ok) {
@@ -52,6 +56,14 @@ export default function AddTopic() {
         className="border border-slate-500 px-8 py-2"
         type="text"
         placeholder="Topic Description"
+      />
+
+      <input
+        onChange={(e) => setDueDate(e.target.value)}
+        value={dueDate}
+        className="border border-slate-500 px-8 py-2"
+        type="date"
+        placeholder="Due Date"
       />
 
       <button

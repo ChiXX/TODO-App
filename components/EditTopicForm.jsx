@@ -3,9 +3,18 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function EditTopicForm({ id, title, description }) {
+export default function EditTopicForm({ id, title, description, dueDate }) {
   const [newTitle, setNewTitle] = useState(title);
   const [newDescription, setNewDescription] = useState(description);
+  const [newDueDate, setNewDueDate] = useState(() => {
+    if (dueDate) {
+      // Format the existing due date to 'YYYY-MM-DD'
+      return new Date(dueDate).toISOString().split("T")[0];
+    } else {
+      // Default to today's date in 'YYYY-MM-DD' format
+      return new Date().toISOString().split("T")[0];
+    }
+  });
 
   const router = useRouter();
 
@@ -18,7 +27,7 @@ export default function EditTopicForm({ id, title, description }) {
         headers: {
           "Content-type": "application/json",
         },
-        body: JSON.stringify({ newTitle, newDescription }),
+        body: JSON.stringify({ newTitle, newDescription, newDueDate }),
       });
 
       if (!res.ok) {
@@ -48,6 +57,14 @@ export default function EditTopicForm({ id, title, description }) {
         className="border border-slate-500 px-8 py-2"
         type="text"
         placeholder="Topic Description"
+      />
+
+      <input
+        onChange={(e) => setNewDueDate(e.target.value)}
+        value={newDueDate}
+        className="border border-slate-500 px-8 py-2"
+        type="date"
+        placeholder="Due Date"
       />
 
       <button className="bg-green-600 font-bold text-white py-3 px-6 w-fit">
