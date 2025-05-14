@@ -95,7 +95,7 @@ export function PaginationFooter({ currentPage, totalPages, setCurrentPage }) {
           <span key={index} className="px-3 py-1 text-sm text-gray-500">...</span>
         ) : (
           <button
-            key={page}
+            key={`btn-${page}`}
             onClick={() => setCurrentPage(page)}
             className={`px-3 py-1 rounded border text-sm ${
               page === currentPage
