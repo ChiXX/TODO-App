@@ -13,7 +13,7 @@ export default function RemoveBtn({ id, onDelete }) {
         });
 
         if (res.ok) {
-          onDelete(id);
+          onDelete();
         } else {
           throw new Error('Failed to delete topic');
         }

@@ -248,11 +248,11 @@ describe('GET /api/topics', () => {
     ]);
     await testApiHandler({
       appHandler,
-      url: '/api/topics?page=100',
+      url: '/api/topics?page=-1',
       test: async ({ fetch }) => {
         const res = await fetch({
           method: 'GET',
-          url: '/api/topics?page=100',
+          url: '/api/topics?page=-1',
         });
         expect(res.status).toBe(400);
         const data = await res.json();

@@ -47,7 +47,7 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const search = searchParams.get('search') || '';
     const sortBy = searchParams.get('sortBy') || 'createdAt';
-    const sortOrder = searchParams.get('sortOrder') || 'asc';
+    const sortOrder = searchParams.get('sortOrder') || 'desc';
     const page = parseInt(searchParams.get('page')) || 1;
     const pageSize = parseInt(searchParams.get('pageSize')) || 5;
 
@@ -91,9 +91,9 @@ export async function GET(request) {
     }
 
     const totalPages = Math.ceil(totalItems / pageSize);
-    const skip = (page - 1) * pageSize;
+    const skip = (Math.min(totalPages, page) - 1) * pageSize;
 
-    if (totalPages > 0 && (isNaN(page) || page < 1 || page > totalPages)) {
+    if (totalPages > 0 && (isNaN(page) || page < 1)) {      
       return NextResponse.json({ error: `Invalid page number (1-${totalPages})` }, { status: 400 });
     }
 
@@ -108,7 +108,7 @@ export async function GET(request) {
       pagination: {
         totalItems,
         totalPages,
-        currentPage: page,
+        currentPage: Math.min(totalPages, page),
         pageSize,
       },
     });

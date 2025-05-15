@@ -20,6 +20,24 @@ A simple full-stack TODO application built with **Next.js**, **React.js**, and *
 
 ## 🚀 Getting Started
 
+```
+git clone https://github.com/ChiXX/TODO-App.git
+npm install
+```
+
+Start the app with preloaded data
+
+```
+ npm run dev:seed
+```
+
+Start the app with empty database
+
+```
+ npm run dev:empty
+```
+
+
 ### 🔧 Prerequisites
 
 - [Node.js](https://nodejs.org/) (v18+)
@@ -36,7 +54,7 @@ All scripts are run using `npm run <script-name>`:
 | `dev`            | Start the app in development mode and create/connect to MongoDB via Docker |
 | `reset-db`       | Stop, clear, and restart the MongoDB container with empty data             |
 | `dev:seed`       | Reset DB, seed it, and start the app                                       |
-| `dev:reset`      | Reset DB and start the app (no seeding)                                    |
+| `dev:empty`      | Reset DB and start the app (no seeding)                                    |
 | `test`           | Run unit tests with Jest                                                   |
 | `lint`           | Run ESLint                                                                 |
 | `format`         | Run prettier                                                               |
