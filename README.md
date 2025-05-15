@@ -1,34 +1,120 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 📝 TODO App – React.js + Next.js + MongoDB
 
-## Getting Started
+A simple full-stack TODO application built with **Next.js**, **React.js**, and **MongoDB**. It supports CRUD operations, search, sorting, pagination, and Swagger-based API documentation.
 
-First, run the development server:
+---
+
+## 🚀 Getting Started
+
+### 🔧 Prerequisites
+
+- [Node.js](https://nodejs.org/) (v18+)
+- [Docker](https://www.docker.com/) & Docker Compose
+
+---
+
+## 📦 Scripts
+
+All scripts are run using `npm run <script-name>`:
+
+| Command          | Description                                                                 |
+|------------------|-----------------------------------------------------------------------------|
+| `dev`            | Start the app in development mode and MongoDB via Docker                   |
+| `mongo`          | Start only MongoDB container (via `docker-compose.db.yml`)                 |
+| `seed`           | Seed the database with sample topic data                                   |
+| `reset-db`       | Stop, clear, and restart the MongoDB container                             |
+| `dev:seed`       | Reset DB, seed data, and start the app                                     |
+| `dev:reset`      | Reset DB and start the app                                                  |
+| `build`          | Build the Next.js production bundle                                        |
+| `start`          | Start the built production server                                          |
+| `lint`           | Run ESLint for code quality checks                                         |
+
+---
+
+## 🗃 MongoDB with Docker
+
+MongoDB is managed using a separate Docker Compose file:  
+```bash
+docker compose -f docker-compose.db.yml up -d
+````
+
+You can reset the database with:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+npm run reset-db
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## 🌱 Seed Data
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+To populate the database with mock topic data:
 
-## Learn More
+```bash
+npm run seed
+```
 
-To learn more about Next.js, take a look at the following resources:
+Or run everything from scratch:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run dev:seed
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 📚 API Documentation
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Swagger UI is available at:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```
+http://localhost:3000/docs
+```
+
+The OpenAPI spec file is located at:
+
+```
+/public/swagger.yaml
+```
+
+---
+
+## 🧪 Features
+
+* ✅ Create, edit, delete tasks
+* ✅ Search by title, description, and due date
+* ✅ Sort by title, description, due date
+* ✅ Pagination with per-page control and go-to page
+* ✅ Full API documentation (Swagger/OpenAPI)
+* ✅ Responsive, accessible UI
+
+---
+
+## 🖼 Preview
+
+Coming soon...
+
+---
+
+## 🛠 Tech Stack
+
+* Frontend: **Next.js 14** (App Router)
+* Backend: **Next API routes**
+* Database: **MongoDB (Dockerized)**
+* Styles: **Tailwind CSS**
+* API Docs: **Swagger UI**
+
+---
+
+## 📂 Folder Structure
+
+```
+/app
+  /api/topics       → API routes
+  /docs             → Swagger UI page
+/components         → UI components
+/models             → Mongoose schemas
+/libs               → DB connection, utilities
+/public             → Static files (e.g. swagger.yaml)
+```
+
+
