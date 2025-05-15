@@ -36,7 +36,9 @@ Start the app with empty database
 ```
  npm run dev:empty
 ```
+App is available at:
 
+http://localhost:3000/
 
 ### 🔧 Prerequisites
 
