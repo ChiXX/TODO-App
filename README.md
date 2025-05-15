@@ -33,14 +33,13 @@ All scripts are run using `npm run <script-name>`:
 
 | Command          | Description                                                                 |
 |------------------|-----------------------------------------------------------------------------|
-| `dev`            | Start the app in development mode and MongoDB via Docker                   |
-| `mongo`          | Start only MongoDB container (via `docker-compose.db.yml`)                 |
-| `seed`           | Seed the database with sample data                                         |
+| `dev`            | Start the app in development mode and create/connect to MongoDB via Docker |
 | `reset-db`       | Stop, clear, and restart the MongoDB container with empty data             |
 | `dev:seed`       | Reset DB, seed it, and start the app                                       |
 | `dev:reset`      | Reset DB and start the app (no seeding)                                    |
-| `lint`           | Run ESLint                                                                 |
 | `test`           | Run unit tests with Jest                                                   |
+| `lint`           | Run ESLint                                                                 |
+| `format`         | Run prettier                                                               |
 
 ---
 
@@ -74,10 +73,6 @@ API documentation is available at:
 
 http://localhost:3000/docs
 
-yaml
-Copy
-Edit
-
 Or see the static OpenAPI definition in [`public/swagger.yaml`](./public/swagger.yaml).
 
 ---
@@ -89,7 +84,7 @@ Jest is used for API unit tests. Test files are located in `app/api/topics/*.tes
 Run tests with:
 
 ```bash
-npm run test
+npm run test:db
 ```
 ## 🗂️ Project Structure
 ```
@@ -97,17 +92,17 @@ app/
   api/
     topics/                # API Routes for topic CRUD
   docs/                    # Swagger UI page
-  components/              # React components (if extracted)
+  addTopic/
+  editTopic/
+components/                # React components
 models/
   topic.js                 # Mongoose schema
 libs/
-  mongodb.js               # DB connection (with caching)
+  mongodb.js               # DB connection
 public/
   swagger.yaml             # OpenAPI definition
 scripts/
   seed.js                  # Database seeder
-tests/
-  topics.test.js           # Route unit tests
 ```
 
 
