@@ -1,6 +1,20 @@
 # 📝 TODO App – React.js + Next.js + MongoDB
 
-A simple full-stack TODO application built with **Next.js**, **React.js**, and **MongoDB**. It supports CRUD operations, search, sorting, pagination, and Swagger-based API documentation.
+A simple full-stack TODO application built with **Next.js**, **React.js**, and **MongoDB**. It supports full CRUD operations, search, sorting, pagination, and is preloaded with sample data.
+
+> Includes RESTful API design and Swagger-based API documentation.
+
+---
+
+## 🧠 Features
+
+- ✅ Create, Read, Update, Delete (CRUD)
+- 🔍 Search and 🔃 Sort by title, description, or due date
+- 📅 Pagination
+- 🌱 Seed database with sample data
+- 📜 Swagger/OpenAPI documentation
+- 🧪 Unit tested API routes (Jest)
+- 🐳 Docker-based MongoDB setup
 
 ---
 
@@ -21,100 +35,79 @@ All scripts are run using `npm run <script-name>`:
 |------------------|-----------------------------------------------------------------------------|
 | `dev`            | Start the app in development mode and MongoDB via Docker                   |
 | `mongo`          | Start only MongoDB container (via `docker-compose.db.yml`)                 |
-| `seed`           | Seed the database with sample topic data                                   |
-| `reset-db`       | Stop, clear, and restart the MongoDB container                             |
-| `dev:seed`       | Reset DB, seed data, and start the app                                     |
-| `dev:reset`      | Reset DB and start the app                                                  |
-| `build`          | Build the Next.js production bundle                                        |
-| `start`          | Start the built production server                                          |
-| `lint`           | Run ESLint for code quality checks                                         |
+| `seed`           | Seed the database with sample data                                         |
+| `reset-db`       | Stop, clear, and restart the MongoDB container with empty data             |
+| `dev:seed`       | Reset DB, seed it, and start the app                                       |
+| `dev:reset`      | Reset DB and start the app (no seeding)                                    |
+| `lint`           | Run ESLint                                                                 |
+| `test`           | Run unit tests with Jest                                                   |
 
 ---
 
-## 🗃 MongoDB with Docker
+## 🌐 REST API Documentation
 
-MongoDB is managed using a separate Docker Compose file:  
-```bash
-docker compose -f docker-compose.db.yml up -d
-````
+### 📎 Base URL: `/api/topics`
 
-You can reset the database with:
+| Method | Endpoint         | Description                      |
+|--------|------------------|----------------------------------|
+| GET    | `/api/topics`    | Get list with pagination/search |
+| POST   | `/api/topics`    | Create a new topic               |
+| GET    | `/api/topics/:id`| Get a topic by ID                |
+| PUT    | `/api/topics/:id`| Update a topic by ID             |
+| DELETE | `/api/topics/:id`| Delete a topic by ID             |
 
-```bash
-npm run reset-db
-```
+### 🔍 Query Parameters for `GET /api/topics`
 
----
-
-## 🌱 Seed Data
-
-To populate the database with mock topic data:
-
-```bash
-npm run seed
-```
-
-Or run everything from scratch:
-
-```bash
-npm run dev:seed
-```
+| Param      | Type   | Description                                  |
+|------------|--------|----------------------------------------------|
+| `search`   | string | Text search in title/description/dueDate     |
+| `sortBy`   | string | One of `title`, `description`, `dueDate`     |
+| `sortOrder`| string | `asc` or `desc`                              |
+| `page`     | number | Page number (default: 1)                     |
+| `pageSize` | number | Items per page (default: 5)                  |
 
 ---
 
-## 📚 API Documentation
+## 📖 Swagger UI
 
-Swagger UI is available at:
+API documentation is available at:
 
-```
 http://localhost:3000/docs
-```
 
-The OpenAPI spec file is located at:
+yaml
+Copy
+Edit
 
-```
-/public/swagger.yaml
-```
-
----
-
-## 🧪 Features
-
-* ✅ Create, edit, delete tasks
-* ✅ Search by title, description, and due date
-* ✅ Sort by title, description, due date
-* ✅ Pagination with per-page control and go-to page
-* ✅ Full API documentation (Swagger/OpenAPI)
-* ✅ Responsive, accessible UI
+Or see the static OpenAPI definition in [`public/swagger.yaml`](./public/swagger.yaml).
 
 ---
 
-## 🖼 Preview
+## 🧪 Tests
 
-Coming soon...
+Jest is used for API unit tests. Test files are located in `app/api/topics/*.test.js`.
 
----
+Run tests with:
 
-## 🛠 Tech Stack
-
-* Frontend: **Next.js 14** (App Router)
-* Backend: **Next API routes**
-* Database: **MongoDB (Dockerized)**
-* Styles: **Tailwind CSS**
-* API Docs: **Swagger UI**
-
----
-
-## 📂 Folder Structure
-
+```bash
+npm run test
 ```
-/app
-  /api/topics       → API routes
-  /docs             → Swagger UI page
-/components         → UI components
-/models             → Mongoose schemas
-/libs               → DB connection, utilities
-/public             → Static files (e.g. swagger.yaml)
+## 🗂️ Project Structure
+```
+app/
+  api/
+    topics/                # API Routes for topic CRUD
+  docs/                    # Swagger UI page
+  components/              # React components (if extracted)
+models/
+  topic.js                 # Mongoose schema
+libs/
+  mongodb.js               # DB connection (with caching)
+public/
+  swagger.yaml             # OpenAPI definition
+scripts/
+  seed.js                  # Database seeder
+tests/
+  topics.test.js           # Route unit tests
 ```
 
 
