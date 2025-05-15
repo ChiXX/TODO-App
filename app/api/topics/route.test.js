@@ -184,7 +184,7 @@ describe('GET /api/topics', () => {
     ]);
     await testApiHandler({
       appHandler,
-      url: '/api/topics?sortBy=description',
+      url: '/api/topics?sortBy=description&sortOrder=asc',
       test: async ({ fetch }) => {
         const res = await fetch({
           method: 'GET',

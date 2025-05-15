@@ -102,7 +102,7 @@ Jest is used for API unit tests. Test files are located in `app/api/topics/*.tes
 Run tests with:
 
 ```bash
-npm run test:db
+npm run test
 ```
 ## 🗂️ Project Structure
 ```
