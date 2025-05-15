@@ -93,7 +93,7 @@ export async function GET(request) {
     const totalPages = Math.ceil(totalItems / pageSize);
     const skip = (Math.min(totalPages, page) - 1) * pageSize;
 
-    if (totalPages > 0 && (isNaN(page) || page < 1)) {      
+    if (totalPages > 0 && (isNaN(page) || page < 1)) {
       return NextResponse.json({ error: `Invalid page number (1-${totalPages})` }, { status: 400 });
     }
 

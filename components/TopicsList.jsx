@@ -49,28 +49,28 @@ export default function TopicsList() {
 
   const handleDelete = async () => {
     try {
-        const params = new URLSearchParams({
-          search: searchTerm,
-          sortBy,
-          sortOrder,
-          page: currentPage,
-          pageSize,
-        });
+      const params = new URLSearchParams({
+        search: searchTerm,
+        sortBy,
+        sortOrder,
+        page: currentPage,
+        pageSize,
+      });
 
-        const res = await fetch(`/api/topics?${params.toString()}`);
+      const res = await fetch(`/api/topics?${params.toString()}`);
 
-        if (res.ok) {
-          const data = await res.json();
-          setTopics(data.topics || []);
-          setTotalItemsInDb(data.totalItemsInDb);
-          setTotalPages(data.pagination.totalPages);
-          setTotalItems(data.pagination.totalItems);
-        } else {
-          throw new Error('Failed to fetch data', res.error);
-        }
-      } catch (error) {
-        console.error('Failed to fetch topics:', error);
+      if (res.ok) {
+        const data = await res.json();
+        setTopics(data.topics || []);
+        setTotalItemsInDb(data.totalItemsInDb);
+        setTotalPages(data.pagination.totalPages);
+        setTotalItems(data.pagination.totalItems);
+      } else {
+        throw new Error('Failed to fetch data', res.error);
       }
+    } catch (error) {
+      console.error('Failed to fetch topics:', error);
+    }
   };
 
   return totalItemsInDb > 0 ? (

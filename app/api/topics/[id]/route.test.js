@@ -188,7 +188,7 @@ describe('/api/topics/[id] route', () => {
         },
       });
     });
-    
+
     it('should return 404 for non-existent ID', async () => {
       const nonExistentId = new mongoose.Types.ObjectId().toString();
       await testApiHandler({
