@@ -51,7 +51,6 @@ export async function GET(request) {
     const page = parseInt(searchParams.get('page')) || 1;
     const pageSize = parseInt(searchParams.get('pageSize')) || 5;
 
-
     if (!VALID_SORT_FIELDS.includes(sortBy)) {
       return NextResponse.json(
         { error: `Invalid sortBy field: must be one of ${VALID_SORT_FIELDS.join(', ')}` },
@@ -116,7 +115,6 @@ export async function GET(request) {
     });
   } catch (error) {
     console.error('GET /api/topics error:', error);
-    console.log(error);
 
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }

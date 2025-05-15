@@ -35,6 +35,7 @@ export default function TopicsList() {
           setTopics(data.topics || []);
           setTotalItemsInDb(data.totalItemsInDb);
           setTotalPages(data.pagination.totalPages);
+          setCurrentPage(data.pagination.currentPage)
           setTotalItems(data.pagination.totalItems);
         } else {
           throw new Error('Failed to fetch data', res.error);
@@ -64,6 +65,7 @@ export default function TopicsList() {
         setTopics(data.topics || []);
         setTotalItemsInDb(data.totalItemsInDb);
         setTotalPages(data.pagination.totalPages);
+        setCurrentPage(data.pagination.currentPage)
         setTotalItems(data.pagination.totalItems);
       } else {
         throw new Error('Failed to fetch data', res.error);
