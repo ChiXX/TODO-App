@@ -1,24 +1,33 @@
-import connectMongoDB from "@/libs/mongodb";
-import Topic from "@/models/topic";
-import { NextResponse } from "next/server";
+import connectMongoDB from '@/libs/mongodb';
+import Topic from '@/models/topic';
+import { NextResponse } from 'next/server';
 
-const VALID_SORT_FIELDS = ["title", "description", "dueDate", "createdAt"];
-const VALID_SORT_ORDERS = ["asc", "desc"];
+const VALID_SORT_FIELDS = ['title', 'description', 'dueDate', 'createdAt'];
+const VALID_SORT_ORDERS = ['asc', 'desc'];
 
 export async function POST(request) {
   try {
     const { title, description, dueDate } = await request.json();
 
     if (!title || typeof title !== 'string') {
-      return NextResponse.json({ error: 'Title is required and must be a string.' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Title is required and must be a string.' },
+        { status: 400 }
+      );
     }
 
     if (!description || typeof description !== 'string') {
-      return NextResponse.json({ error: 'Description is required and must be a string.' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Description is required and must be a string.' },
+        { status: 400 }
+      );
     }
 
     if (!dueDate || isNaN(Date.parse(dueDate))) {
-      return NextResponse.json({ error: 'Due date is required and must be a valid date.' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Due date is required and must be a valid date.' },
+        { status: 400 }
+      );
     }
 
     await connectMongoDB();
@@ -30,7 +39,6 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
-
 
 export async function GET(request) {
   try {
@@ -45,7 +53,7 @@ export async function GET(request) {
 
     if (!VALID_SORT_FIELDS.includes(sortBy)) {
       return NextResponse.json(
-        { error: `Invalid sortBy field: must be one of ${VALID_SORT_FIELDS.join(", ")}` },
+        { error: `Invalid sortBy field: must be one of ${VALID_SORT_FIELDS.join(', ')}` },
         { status: 400 }
       );
     }
@@ -85,11 +93,9 @@ export async function GET(request) {
     const totalPages = Math.ceil(totalItems / pageSize);
     const skip = (page - 1) * pageSize;
 
-
     if (totalPages > 0 && (isNaN(page) || page < 1 || page > totalPages)) {
       return NextResponse.json({ error: `Invalid page number (1-${totalPages})` }, { status: 400 });
     }
-
 
     const topics = await Topic.find(filter)
       .sort({ [sortBy]: sortOrder === 'desc' ? -1 : 1 })
@@ -111,4 +117,3 @@ export async function GET(request) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
-

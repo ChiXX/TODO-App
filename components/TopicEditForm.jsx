@@ -1,10 +1,12 @@
 import { useState } from 'react';
 
 export default function TopicEditForm({ initialData = {}, onSubmit }) {
-  const [title, setTitle] = useState(initialData? initialData.title : '');
-  const [description, setDescription] = useState(initialData?initialData.description : '');
+  const [title, setTitle] = useState(initialData ? initialData.title : '');
+  const [description, setDescription] = useState(initialData ? initialData.description : '');
   const [dueDate, setDueDate] = useState(
-    initialData && initialData.dueDate ?initialData.dueDate.slice(0, 10) : new Date().toISOString().slice(0, 10)
+    initialData && initialData.dueDate
+      ? initialData.dueDate.slice(0, 10)
+      : new Date().toISOString().slice(0, 10)
   );
 
   const handleSubmit = (e) => {

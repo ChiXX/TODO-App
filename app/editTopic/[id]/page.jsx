@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import TopicEditForm from '@/components/TopicEditForm';
 
-
 export default function EditTopic() {
   const router = useRouter();
   const { id } = useParams();
@@ -16,7 +15,7 @@ export default function EditTopic() {
         const res = await fetch(`/api/topics/${id}`);
         if (res.ok) {
           const data = await res.json();
-          
+
           setInitialData(data.topic);
         } else {
           throw new Error('Failed to fetch topic');
@@ -31,7 +30,6 @@ export default function EditTopic() {
 
   const handleUpdate = async (data) => {
     try {
-      
       const res = await fetch(`/api/topics/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },

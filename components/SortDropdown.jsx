@@ -3,12 +3,7 @@
 import { useEffect } from 'react';
 import { FaSortAlphaDown, FaSortAlphaUp } from 'react-icons/fa';
 
-export default function SortDropdown({
-  sortBy,
-  setSortBy,
-  sortOrder,
-  setSortOrder,
-}) {
+export default function SortDropdown({ sortBy, setSortBy, sortOrder, setSortOrder }) {
   // Disable sort order selection when no sortBy is selected
   const isSortOrderDisabled = !sortBy;
 

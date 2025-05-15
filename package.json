@@ -12,6 +12,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "format": "prettier \"app/**/*.{js,jsx,ts,tsx,json}\" \"components/**/*.{js,jsx,ts,tsx,json}\" --write",
     "test": "jest --runInBand",
     "test:db": "docker compose -f docker-compose.test.yml up -d && jest --runInBand && docker compose -f docker-compose.test.yml down -v",
     "test:watch": "jest --watch",
@@ -40,6 +41,7 @@
     "jest-environment-jsdom": "^29.7.0",
     "jest-environment-node": "^29.7.0",
     "next-test-api-route-handler": "^4.0.16",
+    "prettier": "^3.5.3",
     "ts-jest": "^29.3.3",
     "ts-node": "^10.9.2"
   }

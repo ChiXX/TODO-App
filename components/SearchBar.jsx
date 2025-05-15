@@ -10,7 +10,7 @@ export default function SearchBar({ onSearch }) {
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedInput(input);
-    }, 300); 
+    }, 300);
 
     return () => {
       clearTimeout(handler);

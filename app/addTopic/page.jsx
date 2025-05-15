@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
 import TopicEditForm from '@/components/TopicEditForm';
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation';
 
 export default function AddTopic() {
   const router = useRouter();
 
   const handleAdd = async (data) => {
     if (!data || !data.title || !data.description || !data.dueDate) {
-      alert("Title, description, and due date are required.");
+      alert('Title, description, and due date are required.');
       return;
     }
 

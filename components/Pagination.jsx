@@ -1,8 +1,14 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 
-export function PaginationHeader({ pageSize, setPageSize, currentPage, setCurrentPage, totalPages, totalItems  }) {
+export function PaginationHeader({
+  pageSize,
+  setPageSize,
+  setCurrentPage,
+  totalPages,
+  totalItems,
+}) {
   const [goto, setGoto] = useState('');
 
   const handleGoto = () => {
@@ -16,7 +22,9 @@ export function PaginationHeader({ pageSize, setPageSize, currentPage, setCurren
   return (
     <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
       <div className="flex items-center gap-2">
-        <label htmlFor="pageSize" className="text-sm text-gray-700">Items per page:</label>
+        <label htmlFor="pageSize" className="text-sm text-gray-700">
+          Items per page:
+        </label>
         <select
           id="pageSize"
           value={pageSize}
@@ -24,17 +32,19 @@ export function PaginationHeader({ pageSize, setPageSize, currentPage, setCurren
           className="border border-gray-300 rounded px-2 py-1 text-sm"
         >
           {[5, 10, 20, 50].map((size) => (
-            <option key={size} value={size}>{size}</option>
+            <option key={size} value={size}>
+              {size}
+            </option>
           ))}
         </select>
       </div>
 
-      <div className="text-sm text-gray-700">
-        Total items: {totalItems}
-      </div>
+      <div className="text-sm text-gray-700">Total items: {totalItems}</div>
 
       <div className="flex items-center gap-2">
-        <label htmlFor="gotoPage" className="text-sm text-gray-700">Go to page:</label>
+        <label htmlFor="gotoPage" className="text-sm text-gray-700">
+          Go to page:
+        </label>
         <input
           id="gotoPage"
           type="number"
@@ -56,13 +66,15 @@ export function PaginationHeader({ pageSize, setPageSize, currentPage, setCurren
 }
 
 export function PaginationFooter({ currentPage, totalPages, setCurrentPage }) {
-  const pages = [];
-
   const delta = 1; // Number of pages to show around the current page
 
   const range = [];
 
-  for (let i = Math.max(2, currentPage - delta); i <= Math.min(totalPages - 1, currentPage + delta); i++) {
+  for (
+    let i = Math.max(2, currentPage - delta);
+    i <= Math.min(totalPages - 1, currentPage + delta);
+    i++
+  ) {
     range.push(i);
   }
 
@@ -92,15 +104,15 @@ export function PaginationFooter({ currentPage, totalPages, setCurrentPage }) {
       {/* Page number buttons */}
       {range.map((page, index) =>
         page === '...' ? (
-          <span key={index} className="px-3 py-1 text-sm text-gray-500">...</span>
+          <span key={index} className="px-3 py-1 text-sm text-gray-500">
+            ...
+          </span>
         ) : (
           <button
             key={`btn-${page}`}
             onClick={() => setCurrentPage(page)}
             className={`px-3 py-1 rounded border text-sm ${
-              page === currentPage
-                ? 'bg-blue-500 text-white border-blue-500'
-                : 'border-gray-300'
+              page === currentPage ? 'bg-blue-500 text-white border-blue-500' : 'border-gray-300'
             }`}
           >
             {page}
