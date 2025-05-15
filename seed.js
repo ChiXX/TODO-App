@@ -30,7 +30,7 @@ function generateRandomText(words, objects) {
 
 async function seed() {
   try {
-    await mongoose.connect("mongodb://localhost:27017/todo-app");
+    await mongoose.connect("mongodb://localhost:27017/devdb");
     console.log("✅ Connected to MongoDB");
 
     await Topic.deleteMany();

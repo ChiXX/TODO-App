@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import SearchBar from "./SearchBar";
 import SortDropdown from "./SortDropdown";
 import { PaginationHeader, PaginationFooter } from "./Pagination";
