@@ -134,6 +134,61 @@ describe('/api/topics/[id] route', () => {
       });
     });
 
+    it('should return 400 for missing description', async () => {
+      const topic = await Topic.create({
+        title: 'Sample Topic',
+        description: 'This is a sample topic.',
+        dueDate: '2025-05-15',
+      });
+      topicId = topic._id.toString();
+      await testApiHandler({
+        appHandler,
+        params: { id: topicId },
+        url: `http://localhost/api/topics/${topicId}`,
+        test: async ({ fetch }) => {
+          const res = await fetch({
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              title: 'No description provided',
+              dueDate: '2025-06-01',
+            }),
+          });
+          expect(res.status).toBe(400);
+          const data = await res.json();
+          expect(data.error).toMatch(/Description is required/i);
+        },
+      });
+    });
+
+    it('should return 400 for invalid due date', async () => {
+      const topic = await Topic.create({
+        title: 'Sample Topic',
+        description: 'This is a sample topic.',
+        dueDate: '2025-05-15',
+      });
+      topicId = topic._id.toString();
+      await testApiHandler({
+        appHandler,
+        params: { id: topicId },
+        url: `http://localhost/api/topics/${topicId}`,
+        test: async ({ fetch }) => {
+          const res = await fetch({
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              title: 'New title',
+              description: 'New description',
+              dueDate: 'invalid date format',
+            }),
+          });
+          expect(res.status).toBe(400);
+          const data = await res.json();
+          expect(data.error).toMatch(/Due date is required and must be a valid date/i);
+        },
+      });
+    });
+    
     it('should return 404 for non-existent ID', async () => {
       const nonExistentId = new mongoose.Types.ObjectId().toString();
       await testApiHandler({

@@ -64,6 +64,25 @@ describe('POST /api/topics', () => {
     });
   });
 
+  it('should return 400 if description is missing', async () => {
+    await testApiHandler({
+      appHandler,
+      test: async ({ fetch }) => {
+        const res = await fetch({
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title: 'No description',
+            dueDate: '2025-05-15',
+          }),
+        });
+        expect(res.status).toBe(400);
+        const data = await res.json();
+        expect(data.error).toMatch(/description/i);
+      },
+    });
+  });
+
   it('should return 400 if dueDate is invalid', async () => {
     await testApiHandler({
       appHandler,
@@ -135,6 +154,50 @@ describe('GET /api/topics', () => {
     });
   });
 
+  it('should search topics that returns 0 results', async () => {
+    await Topic.insertMany([
+      { title: 'Alpha', description: 'First', dueDate: '2025-06-01' },
+      { title: 'Beta', description: 'Second', dueDate: '2025-06-02' },
+      { title: 'Gamma', description: 'Third', dueDate: '2025-06-03' },
+    ]);
+    await testApiHandler({
+      appHandler,
+      url: '/api/topics?search=Dog',
+      test: async ({ fetch }) => {
+        const res = await fetch({
+          method: 'GET',
+          url: '/api/topics?search=Dog',
+        });
+        const data = await res.json();
+
+        expect(data.topics.length).toBe(0);
+        expect(data.totalItemsInDb).toBe(3);
+      },
+    });
+  });
+
+  it('should sort topics by title/description', async () => {
+    await Topic.insertMany([
+      { title: 'Alpha', description: 'B', dueDate: '2025-06-01' },
+      { title: 'Chris', description: 'A', dueDate: '2025-06-02' },
+      { title: 'Bob', description: 'D', dueDate: '2025-06-03' },
+    ]);
+    await testApiHandler({
+      appHandler,
+      url: '/api/topics?sortBy=description',
+      test: async ({ fetch }) => {
+        const res = await fetch({
+          method: 'GET',
+          url: '/api/topics?sortBy=description',
+        });
+        const data = await res.json();
+
+        expect(data.topics.length).toBe(3);
+        expect(data.topics[0].title).toBe('Chris');
+      },
+    });
+  });
+
   it('should validate invalid sortBy', async () => {
     await Topic.insertMany([
       { title: 'Alpha', description: 'First', dueDate: '2025-06-01' },
@@ -156,6 +219,27 @@ describe('GET /api/topics', () => {
     });
   });
 
+  it('should validate invalid sortOrder', async () => {
+    await Topic.insertMany([
+      { title: 'Alpha', description: 'First', dueDate: '2025-06-01' },
+      { title: 'Beta', description: 'Second', dueDate: '2025-06-02' },
+      { title: 'Gamma', description: 'Third', dueDate: '2025-06-03' },
+    ]);
+    await testApiHandler({
+      appHandler,
+      url: '/api/topics?sortOrder=invalidField',
+      test: async ({ fetch }) => {
+        const res = await fetch({
+          method: 'GET',
+          url: '/api/topics?sortOrder=invalidField',
+        });
+        expect(res.status).toBe(400);
+        const data = await res.json();
+        expect(data.error).toMatch(/Invalid sortOrder/);
+      },
+    });
+  });
+
   it('should validate invalid page number', async () => {
     await Topic.insertMany([
       { title: 'Alpha', description: 'First', dueDate: '2025-06-01' },
@@ -173,6 +257,26 @@ describe('GET /api/topics', () => {
         expect(res.status).toBe(400);
         const data = await res.json();
         expect(data.error).toMatch(/Invalid page number/);
+      },
+    });
+  });
+  it('should validate invalid page size', async () => {
+    await Topic.insertMany([
+      { title: 'Alpha', description: 'First', dueDate: '2025-06-01' },
+      { title: 'Beta', description: 'Second', dueDate: '2025-06-02' },
+      { title: 'Gamma', description: 'Third', dueDate: '2025-06-03' },
+    ]);
+    await testApiHandler({
+      appHandler,
+      url: '/api/topics?pageSize=-1',
+      test: async ({ fetch }) => {
+        const res = await fetch({
+          method: 'GET',
+          url: '/api/topics?pageSize=-1',
+        });
+        expect(res.status).toBe(400);
+        const data = await res.json();
+        expect(data.error).toMatch(/Invalid page size/);
       },
     });
   });
